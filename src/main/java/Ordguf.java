@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,26 +14,35 @@ import java.util.stream.Stream;
 
 public class Ordguf {
 	public static void main(String[] args) throws IOException {
-		char[] input = "delfor".toCharArray();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-		List<String> results = new ArrayList<>();
+		while (true) {
+			System.out.print("Bogstaver: ");
+			char[] input = reader.readLine().toCharArray();
 
-		try (Stream<String> stream = Files.lines(Paths.get("alleord.txt"), StandardCharsets.UTF_8)) {
-			stream.forEach(s -> {
-				if (s.length() > 1 && s.length() <= input.length) {
-					if (contains(input, s) && !results.contains(s)) {
-						results.add(s);
+			if (input.length == 0) {
+				break;
+			}
+
+			List<String> results = new ArrayList<>();
+
+			try (Stream<String> stream = Files.lines(Paths.get("alleord.txt"), StandardCharsets.UTF_8)) {
+				stream.forEach(s -> {
+					if (s.length() > 1 && s.length() <= input.length) {
+						if (contains(input, s) && !results.contains(s)) {
+							results.add(s);
+						}
 					}
-				}
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-		Collections.sort(results, Comparator.comparingInt(String::length));
+			Collections.sort(results, Comparator.comparingInt(String::length));
 
-		for (String s : results) {
-			System.out.println(s);
+			for (String s : results) {
+				System.out.println(s);
+			}
 		}
 	}
 
