@@ -66,7 +66,7 @@ public class Ordguf {
 	}
 
 	private static int getFromIndex(char c, Map<Integer, Character> foundMap) {
-		int retVal = 0;
+		int retVal = -1;
 		if (foundMap.containsValue(c)) {
 			for (Map.Entry<Integer, Character> entry : foundMap.entrySet()) {
 				if (entry.getValue().equals(c) && entry.getKey() > retVal) {
@@ -74,6 +74,6 @@ public class Ordguf {
 				}
 			}
 		}
-		return retVal;
+		return retVal < 0 ? 0 : retVal;
 	}
 }
