@@ -1,6 +1,5 @@
 plugins {
 	id 'java'
-	id 'application'
 	id 'eclipse'
 }
 
@@ -22,4 +21,12 @@ repositories {
 dependencies {
 }
 
-mainClassName = 'Ordguf.App'
+jar {
+    manifest {
+        attributes "Main-Class": "Ordguf"
+    }
+ 
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
