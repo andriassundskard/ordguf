@@ -1,6 +1,9 @@
+package dk.sundskard;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,7 +16,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Ordguf {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
+		new Ordguf().run();
+	}
+
+	public void run() throws IOException, URISyntaxException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 		while (true) {
@@ -26,10 +33,12 @@ public class Ordguf {
 
 			List<String> results = new ArrayList<>();
 
-			try (Stream<String> stream = Files.lines(Paths.get("alleord.txt"), StandardCharsets.UTF_8)) {
+			try (Stream<String> stream = Files.lines(
+							Paths.get(this.getClass().getClassLoader().getResource("alleord.txt").toURI()),
+							StandardCharsets.UTF_8)) {
 				stream.forEach(s -> {
 					if (s.length() > 1 && s.length() <= input.length) {
-						if (contains(input, s) && !results.contains(s)) {
+						if (this.contains(input, s) && !results.contains(s)) {
 							results.add(s);
 						}
 					}
@@ -46,11 +55,11 @@ public class Ordguf {
 		}
 	}
 
-	private static boolean contains(char[] input, String word) {
+	private boolean contains(char[] input, String word) {
 		Map<Integer, Character> foundMap = new HashMap<>();
 		int i = 0;
 		for (char c : input) {
-			int fromIndex = getFromIndex(c, foundMap);
+			int fromIndex = this.getFromIndex(c, foundMap);
 			if (word.indexOf(c, fromIndex) > -1) {
 				int index = word.indexOf(c, fromIndex);
 				if (foundMap.get(index) == null || !(foundMap.containsKey(index)) && foundMap.get(index).equals(c)) {
@@ -65,7 +74,7 @@ public class Ordguf {
 		return false;
 	}
 
-	private static int getFromIndex(char c, Map<Integer, Character> foundMap) {
+	private int getFromIndex(char c, Map<Integer, Character> foundMap) {
 		int retVal = -1;
 		if (foundMap.containsValue(c)) {
 			for (Map.Entry<Integer, Character> entry : foundMap.entrySet()) {

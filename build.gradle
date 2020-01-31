@@ -23,7 +23,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes "Main-Class": "Ordguf"
+        attributes "Main-Class": "dk.sundskard.Ordguf"
     }
  
     from {
