@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,9 +31,10 @@ public class Ordguf {
 
 			List<String> results = new ArrayList<>();
 
-			try (Stream<String> stream = Files.lines(
-							Paths.get(this.getClass().getClassLoader().getResource("alleord.txt").toURI()),
-							StandardCharsets.UTF_8)) {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+							this.getClass().getResourceAsStream("/alleord.txt"), StandardCharsets.UTF_8));
+
+			try (Stream<String> stream = bufferedReader.lines()) {
 				stream.forEach(s -> {
 					if (s.length() > 1 && s.length() <= input.length) {
 						if (this.contains(input, s) && !results.contains(s)) {
@@ -43,8 +42,6 @@ public class Ordguf {
 						}
 					}
 				});
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 
 			Collections.sort(results, Comparator.comparingInt(String::length));
